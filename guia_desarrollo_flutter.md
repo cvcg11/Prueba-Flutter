@@ -77,7 +77,33 @@ Text(
 
 ---
 
-## 🔄 5. Tu Flujo de Aprendizaje
+---
+
+## 🌐 5. Configuración de Red (Conexión al Backend)
+
+Para que tu app se comunique con el servidor Spring en tu computadora, la configuración depende de dónde estés ejecutando la app:
+
+### A. En Emulador/Simulador Local
+Usa la IP especial que Google creó para apuntar a tu "localhost":
+- **URL**: `http://10.0.2.2:8080/api`
+
+### B. En Dispositivo Físico (Recomendado: ADB Reverse)
+Si conectas tu celular por USB, puedes hacer que `localhost` funcione ejecutando un comando en tu PC:
+1.  **Comando**: `adb reverse tcp:8080 tcp:8080`
+2.  **URL en Código**: `http://localhost:8080/api`
+*Nota: Este método también funciona en el emulador y es el más estable.*
+
+### C. Por Wi-Fi (Sin Cables)
+Ambos deben estar en la misma red Wi-Fi:
+1.  **Busca tu IP**: Ejecuta `ipconfig` en Windows (ej. `192.168.0.13`).
+2.  **URL en Código**: `http://192.168.0.13:8080/api`
+
+> [!IMPORTANT]
+> Si usas el método **B (ADB Reverse)**, puedes mantener `localhost` en tu código y funcionará tanto en el celular físico como en el emulador, siempre y cuando el comando `adb reverse` esté activo.
+
+---
+
+## 🔄 6. Tu Flujo de Aprendizaje
 
 1.  **Modifica**: Abre `employees_page.dart` e intenta cambiar el orden de los elementos o agregar un nuevo `EmployeeListTile`.
 2.  **Crea**: Intenta crear una nueva carpeta `lib/features/inventory/` y replica la estructura.

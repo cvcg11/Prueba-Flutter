@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 enum ButtonType { primary, secondary, tertiary, outlined }
 
@@ -35,8 +34,8 @@ class CustomButton extends StatelessWidget {
       return OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.primaryLight),
-          foregroundColor: AppColors.primaryLight,
+          side: BorderSide(color: theme.colorScheme.primary),
+          foregroundColor: theme.colorScheme.primary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: _buildContent(),
@@ -44,17 +43,20 @@ class CustomButton extends StatelessWidget {
     }
 
     Color bgColor;
-    Color fgColor = AppColors.textPrimary;
+    Color fgColor = theme.colorScheme.onPrimary;
 
     switch (type) {
       case ButtonType.secondary:
-        bgColor = AppColors.secondary;
+        bgColor = theme.colorScheme.secondary;
+        fgColor = theme.colorScheme.onSecondary;
         break;
       case ButtonType.tertiary:
-        bgColor = AppColors.error;
+        bgColor = theme.colorScheme.error;
+        fgColor = theme.colorScheme.onError;
         break;
       default:
-        bgColor = AppColors.primary;
+        bgColor = theme.colorScheme.primary;
+        fgColor = theme.colorScheme.onPrimary;
     }
 
     return ElevatedButton(
@@ -65,8 +67,8 @@ class CustomButton extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ).copyWith(
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) return bgColor.withOpacity(0.5);
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) return bgColor.withOpacity(0.5);
           return bgColor;
         }),
       ),

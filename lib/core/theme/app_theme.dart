@@ -5,6 +5,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: 'SpaceGrotesk',
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
@@ -41,8 +42,8 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.secondary,
+        filled: false,
+        fillColor: AppColors.inputBackground.withValues(alpha: 0.3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
