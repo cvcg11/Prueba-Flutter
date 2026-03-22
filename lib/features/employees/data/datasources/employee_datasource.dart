@@ -49,8 +49,9 @@ class EmployeeDatasource {
         final message = errorData['message'] ?? 'Error desconocido';
         throw Exception(message);
       } catch (e) {
-        if (e is Exception)
-          rethrow; // Si ya es nuestra excepción con el mensaje, la lanzamos
+        if (e is Exception){
+          rethrow;
+        }
         throw Exception('Error inesperado (${response.statusCode})');
       }
     }
@@ -76,8 +77,9 @@ class EmployeeDatasource {
         final message = errorData['message'] ?? 'Error desconocido';
         throw Exception(message);
       } catch (e) {
-        if (e is Exception)
+        if (e is Exception){
           rethrow; // Si ya es nuestra excepción con el mensaje, la lanzamos
+        }
         throw Exception('Error inesperado (${response.statusCode})');
       }
     }

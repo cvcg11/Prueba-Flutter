@@ -68,7 +68,7 @@ class CustomButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ).copyWith(
         backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.disabled)) return bgColor.withOpacity(0.5);
+          if (states.contains(WidgetState.disabled)) return bgColor.withValues(alpha: 0.5);
           return bgColor;
         }),
       ),

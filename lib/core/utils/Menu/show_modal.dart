@@ -10,7 +10,7 @@ class ShowModal {
   }) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface, // Usamos el gris oscuro de la paleta
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -32,16 +32,12 @@ class ShowModal {
                   ),
                 ),
               ),
-              // 2. Título de la sección
               Text(
                 title.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(height: 20),
-              // 3. Mapeo de opciones
-              ...options
-                  .map((option) => _buildOptionTile(context, option))
-                  .toList(),
+              ...options.map((option) => _buildOptionTile(context, option)),
             ],
           ),
         );

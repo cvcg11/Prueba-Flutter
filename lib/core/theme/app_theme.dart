@@ -15,7 +15,6 @@ class AppTheme {
         error: AppColors.error,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
-        background: AppColors.background,
       ),
       scaffoldBackgroundColor: AppColors.background,
       cardTheme: CardThemeData(
