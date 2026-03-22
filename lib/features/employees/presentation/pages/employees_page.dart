@@ -4,6 +4,7 @@ import 'package:practica_flutter/core/utils/Menu/alert.dart';
 import 'package:practica_flutter/core/utils/Menu/menu_option.dart';
 import 'package:practica_flutter/core/utils/Menu/show_modal.dart';
 import 'package:practica_flutter/core/widgets/custom_button.dart';
+import 'package:practica_flutter/core/widgets/page_header.dart';
 import 'package:practica_flutter/features/employees/data/services/employee_service.dart';
 import 'package:practica_flutter/features/employees/domain/entities/employee_entity.dart';
 import 'package:practica_flutter/features/employees/domain/repositories/employee_repository.dart';
@@ -11,7 +12,6 @@ import 'package:practica_flutter/features/employees/presentation/pages/employee_
 import 'package:practica_flutter/features/employees/presentation/pages/employee_form_page.dart';
 import 'package:practica_flutter/features/employees/presentation/widgets/employees_list.dart';
 import 'package:practica_flutter/features/employees/presentation/widgets/employees_list_error.dart';
-import 'package:practica_flutter/features/employees/presentation/widgets/employees_page_header.dart';
 
 class EmployeesPage extends StatefulWidget {
   const EmployeesPage({super.key});
@@ -118,7 +118,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const EmployeesPageHeader(),
+          const PageHeader(label: 'ADMINISTRACIÓN', title: 'PERSONAL'),
           const SizedBox(height: 10),
           Expanded(
             child: FutureBuilder<List<EmployeeEntity>>(
@@ -151,22 +151,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
           icon: Icons.add,
           onPressed: _openAddForm,
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.background,
-        selectedItemColor: AppColors.primaryLight,
-        unselectedItemColor: AppColors.textMuted,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.build_outlined), label: ''),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.computer), label: ''),
-        ],
       ),
     );
   }
