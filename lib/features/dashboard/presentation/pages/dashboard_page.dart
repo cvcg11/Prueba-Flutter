@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/employee_list_tile.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:practica_flutter/core/theme/app_colors.dart';
+import 'package:practica_flutter/core/widgets/page_header.dart';
+import 'package:practica_flutter/features/dashboard/presentation/widgets/dashboard_metrics_row.dart';
+import 'package:practica_flutter/features/dashboard/presentation/widgets/dashboard_quick_actions.dart';
+import 'package:practica_flutter/features/dashboard/presentation/widgets/dashboard_recent_employees.dart';
+import 'package:practica_flutter/features/dashboard/presentation/widgets/dashboard_section_title.dart';
+import 'package:practica_flutter/features/dashboard/presentation/widgets/dashboard_weekly_chart.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -13,59 +17,66 @@ class DashboardPage extends StatelessWidget {
         leading: const Icon(Icons.menu),
         title: const Text('CGI.IMPORT'),
         actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.divider, height: 1),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
-            Text(
-              'ADMINISTRACIÓN',
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: AppColors.primaryLight),
+            const PageHeader(label: 'RESUMEN GENERAL', title: 'DASHBOARD'),
+            const SizedBox(height: 10),
+
+            // ── Métricas ─────────────────────────────────────────────────────
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardMetricsRow(),
             ),
-            const SizedBox(height: 8),
-            Text('PERSONAL', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 24),
-            const EmployeeListTile(
-              name: 'Ricardo Antonio Méndez',
-              phone: '+503 7844-9821',
+
+            const SizedBox(height: 28),
+
+            // ── Actividad semanal ─────────────────────────────────────────────
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardSectionTitle(title: 'ACTIVIDAD SEMANAL'),
             ),
-            const EmployeeListTile(
-              name: 'Carla Sofía Valladares',
-              phone: '+503 2241-8892',
+            const SizedBox(height: 14),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardWeeklyChart(),
             ),
-            const EmployeeListTile(
-              name: 'Marcos Daniel Estrada',
-              phone: '+503 6108-3341',
+
+            const SizedBox(height: 28),
+
+            // ── Personal reciente ─────────────────────────────────────────────
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardSectionTitle(title: 'PERSONAL RECIENTE'),
             ),
-            const Spacer(),
-            CustomButton(
-              label: 'Agregar Personal',
-              icon: Icons.add,
-              onPressed: () {},
+            const SizedBox(height: 14),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardRecentEmployees(),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 28),
+
+            // ── Accesos rápidos ───────────────────────────────────────────────
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardSectionTitle(title: 'ACCESOS RÁPIDOS'),
+            ),
+            const SizedBox(height: 14),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardQuickActions(),
+            ),
+
+            const SizedBox(height: 32),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.background,
-        selectedItemColor: AppColors.primaryLight,
-        unselectedItemColor: AppColors.textMuted,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.build_outlined), label: ''),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.computer), label: ''),
-        ],
       ),
     );
   }
