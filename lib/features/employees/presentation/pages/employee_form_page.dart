@@ -6,78 +6,91 @@ import 'package:practica_flutter/core/widgets/custom_input_field.dart';
 import 'package:practica_flutter/features/employees/data/services/employee_service.dart';
 import 'package:practica_flutter/features/employees/domain/entities/employee_entity.dart';
 import 'package:practica_flutter/features/employees/domain/repositories/employee_repository.dart';
+import 'package:practica_flutter/features/employees/presentation/widgets/employee_form_header.dart';
+import 'package:practica_flutter/features/employees/presentation/widgets/employee_form_section.dart';
 
 class EmployeeFormPage extends StatefulWidget {
   final EmployeeEntity? employee;
+
   const EmployeeFormPage({super.key, this.employee});
+
   @override
   State<EmployeeFormPage> createState() => _EmployeeFormPageState();
 }
 
 class _EmployeeFormPageState extends State<EmployeeFormPage> {
-  final fullNameCtrl = TextEditingController();
-  final duiCtrl = TextEditingController();
-  final emailCtrl = TextEditingController();
-  final phoneCtrl = TextEditingController();
-  final userCtrl = TextEditingController();
-  final passwordCtrl = TextEditingController();
+  final _fullNameCtrl = TextEditingController();
+  final _duiCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
+  final _userCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
+
   final EmployeeRepository _repo = EmployeeService();
+
+  bool get _isEditing => widget.employee != null;
 
   @override
   void initState() {
     super.initState();
-    if (widget.employee != null) {
-      fullNameCtrl.text = widget.employee!.fullName;
-      duiCtrl.text = widget.employee!.dui;
-      emailCtrl.text = widget.employee!.email;
-      phoneCtrl.text = widget.employee!.phone;
-      userCtrl.text = widget.employee!.username;
+    if (_isEditing) {
+      _fullNameCtrl.text = widget.employee!.fullName;
+      _duiCtrl.text = widget.employee!.dui;
+      _emailCtrl.text = widget.employee!.email;
+      _phoneCtrl.text = widget.employee!.phone;
+      _userCtrl.text = widget.employee!.username;
     }
+  }
+
+  @override
+  void dispose() {
+    _fullNameCtrl.dispose();
+    _duiCtrl.dispose();
+    _emailCtrl.dispose();
+    _phoneCtrl.dispose();
+    _userCtrl.dispose();
+    _passwordCtrl.dispose();
+    super.dispose();
   }
 
   Future<void> _saveEmployee() async {
     final employeeData = EmployeeEntity(
       id: widget.employee?.id ?? '',
-      fullName: fullNameCtrl.text,
-      dui: duiCtrl.text,
-      email: emailCtrl.text,
-      phone: phoneCtrl.text,
-      username: userCtrl.text,
-      password: passwordCtrl.text,
+      fullName: _fullNameCtrl.text,
+      dui: _duiCtrl.text,
+      email: _emailCtrl.text,
+      phone: _phoneCtrl.text,
+      username: _userCtrl.text,
+      password: _passwordCtrl.text,
       status: widget.employee?.status ?? 'ACTIVE',
     );
 
     try {
-      if (widget.employee == null) {
-        await _repo.addEmployee(employeeData);
-      } else {
+      if (_isEditing) {
         await _repo.updateEmployee(widget.employee!.id, employeeData);
+      } else {
+        await _repo.addEmployee(employeeData);
       }
       if (mounted) {
-        Navigator.pop(context, true); // Retornamos true para indicar éxito
+        Navigator.pop(context, true);
         Alert.show(
           context,
-          message: widget.employee == null
-              ? '¡Empleado guardado con éxito!'
-              : '¡Datos actualizados correctamente!',
+          message: _isEditing
+              ? '¡Datos actualizados correctamente!'
+              : '¡Empleado guardado con éxito!',
           isError: false,
         );
       }
     } catch (e) {
-      if (mounted) {
-        Alert.show(context, message: e.toString(), isError: true);
-      }
+      if (mounted) Alert.show(context, message: e.toString(), isError: true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isEditing = widget.employee != null;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'ACTUALIZAR DATOS' : 'REGISTRO TÉCNICO'),
+        title: Text(_isEditing ? 'ACTUALIZAR DATOS' : 'REGISTRO TÉCNICO'),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(color: AppColors.divider, height: 1),
@@ -88,55 +101,45 @@ class _EmployeeFormPageState extends State<EmployeeFormPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              isEditing ? 'EDICIÓN DE PERFIL' : 'ALTA DE OPERARIO',
-              style: theme.textTheme.headlineLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              isEditing
-                  ? 'MODIFIQUE LOS DATOS DEL PERSONAL SEGÚN SEA NECESARIO.'
-                  : 'INGRESE LOS DATOS TÉCNICOS PARA LA CREACIÓN DEL PERFIL DE ACCESO AL TALLER.',
-              style: theme.textTheme.labelLarge,
-            ),
+            EmployeeFormHeader(isEditing: _isEditing),
             const SizedBox(height: 32),
-            _buildSection(
+            EmployeeFormSection(
               title: 'IDENTIFICACIÓN PERSONAL',
               children: [
                 CustomInputField(
                   label: 'NOMBRE COMPLETO',
-                  controller: fullNameCtrl,
+                  controller: _fullNameCtrl,
                 ),
                 CustomInputField(
                   label: 'DOCUMENTO DE IDENTIDAD (DUI)',
-                  controller: duiCtrl,
+                  controller: _duiCtrl,
                 ),
               ],
             ),
-            _buildSection(
+            EmployeeFormSection(
               title: 'CANALES DE COMUNICACIÓN',
               children: [
                 CustomInputField(
                   label: 'CORREO CORPORATIVO',
-                  controller: emailCtrl,
+                  controller: _emailCtrl,
                 ),
                 CustomInputField(
                   label: 'NÚMERO DE TELÉFONO',
-                  controller: phoneCtrl,
+                  controller: _phoneCtrl,
                 ),
               ],
             ),
-            _buildSection(
+            EmployeeFormSection(
               title: 'ACCESO AL SISTEMA',
               children: [
                 CustomInputField(
                   label: 'NOMBRE DE USUARIO',
-                  controller: userCtrl,
+                  controller: _userCtrl,
                 ),
-                if (!isEditing)
+                if (!_isEditing)
                   CustomInputField(
                     label: 'CONTRASEÑA',
-                    controller: passwordCtrl,
+                    controller: _passwordCtrl,
                     obscureText: true,
                     icon: Icons.visibility_outlined,
                   ),
@@ -144,43 +147,10 @@ class _EmployeeFormPageState extends State<EmployeeFormPage> {
             ),
             const SizedBox(height: 32),
             CustomButton(
-              label: isEditing ? 'GUARDAR CAMBIOS' : 'REGISTRAR OPERARIO',
+              label: _isEditing ? 'GUARDAR CAMBIOS' : 'REGISTRAR OPERARIO',
               onPressed: _saveEmployee,
             ),
             const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection({
-    required String title,
-    required List<Widget> children,
-  }) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(color: theme.cardTheme.color),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: AppColors.primaryLight,
-                letterSpacing: 1.5,
-              ),
-            ),
-            const SizedBox(height: 16),
-            for (int i = 0; i < children.length; i++) ...[
-              children[i],
-              if (i < children.length - 1) const SizedBox(height: 12),
-            ],
           ],
         ),
       ),
